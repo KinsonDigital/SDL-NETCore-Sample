@@ -15,12 +15,14 @@ namespace SDLTesting
 
         static void Main(string[] args)
         {
+            //Check to make sure that the video card can be initialized
             if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) < 0)
             {
                 Console.WriteLine("Unable to initialize SDL. Error: {0}", SDL.SDL_GetError());
             }
             else
             {
+                //Create a window
                 var window = SDL.SDL_CreateWindow(".NET Core SDL2-CS Tutorial",
                     SDL.SDL_WINDOWPOS_CENTERED,
                     SDL.SDL_WINDOWPOS_CENTERED,
@@ -35,38 +37,39 @@ namespace SDLTesting
                 }
                 else
                 {
-                    //SDL.SDL_Delay(5000);
+                    //SDL.SDL_Delay(5000); //This can be used to delay the update of SDL
 
                     bool quit = false;
 
                     while (!quit)
                     {
-                        SDL.SDL_Event e;
-
-                        while (SDL.SDL_PollEvent(out e) != 0)
+                        //
+                        while (SDL.SDL_PollEvent(out var e) != 0)
                         {
+                            //Check for which type event the window has thrown
                             switch (e.type)
                             {
-                                case SDL.SDL_EventType.SDL_QUIT:
+                                case SDL.SDL_EventType.SDL_QUIT://Quit app event
                                     quit = true;
                                     break;
-
-                                case SDL.SDL_EventType.SDL_KEYDOWN:
-
+                                case SDL.SDL_EventType.SDL_KEYDOWN://Key event
+                                    //Check for various key input
                                     switch (e.key.keysym.sym)
                                     {
                                         case SDL.SDL_Keycode.SDLK_q:
                                             quit = true;
                                             break;
                                     }
-
                                     break;
                             }
                         }
                     }
                 }
 
+                //Destroy the window
                 SDL.SDL_DestroyWindow(window);
+
+                //And quit the application
                 SDL.SDL_Quit();
             }
         }
