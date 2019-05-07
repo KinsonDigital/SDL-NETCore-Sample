@@ -1,16 +1,24 @@
 ﻿using SDL2;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace SDLTesting
 {
-    class Program
+    public class Program
     {
+        private static string _contentPath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\Content";
+
         /*INFO
             SDL2-CS.dll is a dll created by compiling the C# NET wrapper project on github.
             GitHub Repo: https://github.com/flibitijibibo/SDL2-CS
 
             SDL2.dll is the original SDL2 library written in C and C++.  SDL2-CS is the wrapper/binding that
             calls into SDL2.dll.
+
+            Useful Links:
+                1. https://samulinatri.com/blog/net-core-sdl2-window-creation/
+                2. https://samulinatri.com/blog/net-core-sdl2-image-rendering/
          */
 
         static void Main(string[] args)
@@ -23,7 +31,7 @@ namespace SDLTesting
             else
             {
                 //Create a window
-                var window = SDL.SDL_CreateWindow(".NET Core SDL2-CS Tutorial",
+                var windowPtr = SDL.SDL_CreateWindow(".NET Core SDL2-CS Tutorial",
                     SDL.SDL_WINDOWPOS_CENTERED,
                     SDL.SDL_WINDOWPOS_CENTERED,
                     1020,
@@ -31,7 +39,15 @@ namespace SDLTesting
                     SDL.SDL_WindowFlags.SDL_WINDOW_RESIZABLE
                 );
 
-                if (window == IntPtr.Zero)
+                var graphicPath = $@"{_contentPath}\Graphics\PurpleBox.png";
+
+
+                //Create a renderer for rendering graphics to the screen
+                var rendererPtr = SDL.SDL_CreateRenderer(windowPtr, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED);
+                var texturePtr = SDL_image.IMG_LoadTexture(rendererPtr, $@"{_contentPath}\Graphics\PurpleBox.png");
+
+
+                if (windowPtr == IntPtr.Zero)
                 {
                     Console.WriteLine("Unable to create a window. SDL. Error: {0}", SDL.SDL_GetError());
                 }
@@ -43,7 +59,6 @@ namespace SDLTesting
 
                     while (!quit)
                     {
-                        //
                         while (SDL.SDL_PollEvent(out var e) != 0)
                         {
                             //Check for which type event the window has thrown
@@ -63,11 +78,22 @@ namespace SDLTesting
                                     break;
                             }
                         }
+
+                        //Clear the rendering surface, which is the window
+                        SDL.SDL_RenderClear(rendererPtr);
+
+                        //Copies the texture onto the render surface.  It is not visible at this point
+                        SDL.SDL_RenderCopy(rendererPtr, texturePtr, IntPtr.Zero, IntPtr.Zero);
+
+                        //Actually display the results onto the rendering texture
+                        SDL.SDL_RenderPresent(rendererPtr);
                     }
                 }
 
-                //Destroy the window
-                SDL.SDL_DestroyWindow(window);
+                //Destroy the texture, renderer and window
+                SDL.SDL_DestroyTexture(rendererPtr);
+                SDL.SDL_DestroyRenderer(rendererPtr);
+                SDL.SDL_DestroyWindow(windowPtr);
 
                 //And quit the application
                 SDL.SDL_Quit();
