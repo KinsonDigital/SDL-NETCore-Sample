@@ -39,13 +39,23 @@ namespace SDLTesting
                     SDL.SDL_WindowFlags.SDL_WINDOW_RESIZABLE
                 );
 
-                var graphicPath = $@"{_contentPath}\Graphics\PurpleBox.png";
-
-
                 //Create a renderer for rendering graphics to the screen
                 var rendererPtr = SDL.SDL_CreateRenderer(windowPtr, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED);
-                var texturePtr = SDL_image.IMG_LoadTexture(rendererPtr, $@"{_contentPath}\Graphics\PurpleBox.png");
+                var texturePtr = SDL_image.IMG_LoadTexture(rendererPtr, $@"{_contentPath}\Graphics\OrangeBox.png");
 
+                //The section of the image to render
+                SDL.SDL_Rect srcRect;
+                srcRect.x = 0;
+                srcRect.y = 0;
+                srcRect.w = 25;
+                srcRect.h = 25;
+
+                //The location on the surface of where to render the image
+                SDL.SDL_Rect targetRect;
+                targetRect.x = 100;
+                targetRect.y = 100;
+                targetRect.w = 25;
+                targetRect.h = 25;
 
                 if (windowPtr == IntPtr.Zero)
                 {
@@ -83,7 +93,7 @@ namespace SDLTesting
                         SDL.SDL_RenderClear(rendererPtr);
 
                         //Copies the texture onto the render surface.  It is not visible at this point
-                        SDL.SDL_RenderCopy(rendererPtr, texturePtr, IntPtr.Zero, IntPtr.Zero);
+                        SDL.SDL_RenderCopy(rendererPtr, texturePtr, ref srcRect, ref targetRect);
 
                         //Actually display the results onto the rendering texture
                         SDL.SDL_RenderPresent(rendererPtr);
