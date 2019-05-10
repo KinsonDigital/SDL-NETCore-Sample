@@ -24,12 +24,6 @@ namespace SDLTesting
 
         static void Main(string[] args)
         {
-            var person = new Person();
-
-            var constants = person.GetType().GetConstants();
-
-            
-            return;
             //Check to make sure that the video card can be initialized
             if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) < 0)
             {

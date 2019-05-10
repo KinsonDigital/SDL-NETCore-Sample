@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>x64</Platforms>
     <ApplicationIcon />
@@ -10,16 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="SDL2-CS">
-      <HintPath>Binaries\x64\SDL2-CS.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\SDL2-CS\SDL2-CS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Binaries\x64\libpng16-16.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Binaries\x64\SDL2-CS.dll">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="Binaries\x64\SDL2.dll">
