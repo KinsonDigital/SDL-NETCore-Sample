@@ -11,26 +11,34 @@
 
   <ItemGroup>
     <Reference Include="SDL2-CS">
-      <HintPath>..\..\..\..\Google Drive\KinsonDigital\SOFTWARE DEVELOPMENT\TESTING\SDLTesting\SDLTesting\SDL2-CS.dll</HintPath>
+      <HintPath>Binaries\x64\SDL2-CS.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Binaries\x86\libpng16-16.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Binaries\x64\libpng16-16.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Binaries\x86\SDL2-CS.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Binaries\x64\SDL2-CS.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Binaries\x86\SDL2.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Binaries\x64\SDL2.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Binaries\x86\SDL2_image.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Binaries\x64\SDL2_image.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="Binaries\x86\zlib1.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Binaries\x64\zlib1.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="REM Move the binaries to the output folder&#xD;&#xA;copy &quot;$(ProjectDir)\Binaries\$(PlatformName)&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="REM Remove the binaries to make sure they are getting updated&#xD;&#xA;del &quot;$(TargetDir)SDL2-CS.dll&quot;&#xD;&#xA;del &quot;$(TargetDir)SDL2.dll&quot;&#xD;&#xA;del &quot;$(TargetDir)SDL2_image.dll&quot;&#xD;&#xA;del &quot;$(TargetDir)zlib1.dll&quot;&#xD;&#xA;del &quot;$(TargetDir)libpng16-16.dll&quot;" />
+  </Target>
 
 </Project>
